@@ -1,4 +1,4 @@
 #!/bin/bash
 
-gcloud --project=arnold-f6q-kong container clusters get-credentials primary
-gcloud --project=arnold-f6q-kong container clusters get-credentials secondary
+gcloud --project=$1 container clusters get-credentials primary
+gcloud --project=$1 container clusters get-credentials secondary
