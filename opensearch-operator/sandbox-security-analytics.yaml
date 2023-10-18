@@ -1,0 +1,37 @@
+apiVersion: opensearch.opster.io/v1
+kind: OpenSearchCluster
+metadata:
+  name: sandbox-security-analytics 
+  namespace: default
+spec:
+  general:
+    serviceName: sandbox-security-analytics 
+    version: 2.11.0
+  dashboards:
+    enable: true
+    version: 2.11.0
+    replicas: 1
+    resources:
+      requests:
+         memory: "512Mi"
+         cpu: "500m"
+      limits:
+         memory: "512Mi"
+         cpu: "500m"
+    service: 
+      type: "LoadBalancer"
+  nodePools:
+    - component: nodes
+      replicas: 2
+      diskSize: "5Gi"
+      nodeSelector:
+      resources:
+         requests:
+            memory: "2Gi"
+            cpu: "700m"
+         limits:
+            memory: "2Gi"
+            cpu: "700m"
+      roles:
+        - "cluster_manager"
+        - "data"

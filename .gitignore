@@ -1,0 +1,7 @@
+#MAC Stuff to ignore
+.DS_Store
+
+# Terraform State
+terraform.tfstate
+*.terraform*
+.terraform.lock.hcl

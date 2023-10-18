@@ -1,0 +1,277 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app: data-prepper
+  name: data-prepper-config
+data:
+  pipelines.yaml: |
+    log-pipeline:
+      source:
+        http:
+          ssl: false
+      processor:
+        - rename_keys:
+            entries:
+            - from_key: "date"
+              to_key: "@timestamp"
+              overwrite_if_to_key_exists: true
+            - from_key: "BOOT_ID"
+              to_key: "host.boot.id"
+              overwrite_if_to_key_exists: true  
+            - from_key: "MACHINE_ID"
+              to_key: "host.id"
+              overwrite_if_to_key_exists: true
+            - from_key: "RUNTIME_SCOPE"
+              to_key: "event.module"
+              overwrite_if_to_key_exists: true
+            - from_key: "TRANSPORT"
+              to_key: "event.category"
+              overwrite_if_to_key_exists: true
+            - from_key: "SYSLOG_FACILITY"
+              to_key: "log.syslog.facility.name"
+              overwrite_if_to_key_exists: true
+            - from_key: "SYSLOG_IDENTIFIER"
+              to_key: "log.syslog.msgid"
+              overwrite_if_to_key_exists: true
+            - from_key: "HOSTNAME"
+              to_key: "host.name"
+              overwrite_if_to_key_exists: true
+            - from_key: "AUDIT_TYPE"
+              to_key: "event.id"
+              overwrite_if_to_key_exists: true
+            - from_key: "AUDIT_TYPE_NAME"
+              to_key: "event.type"
+              overwrite_if_to_key_exists: true
+            - from_key: "AUDIT_FIELD_ARGC"
+              to_key: "auditd.log.argc"
+              overwrite_if_to_key_exists: true
+            - from_key: "AUDIT_FIELD_A0"
+              to_key: "auditd.log.a0"
+              overwrite_if_to_key_exists: true
+            - from_key: "AUDIT_FIELD_A1"
+              to_key: "auditd.log.a1"
+              overwrite_if_to_key_exists: true
+            - from_key: "AUDIT_FIELD_A2"
+              to_key: "auditd.log.a2"
+              overwrite_if_to_key_exists: true
+            - from_key: "AUDIT_FIELD_A3"
+              to_key: "auditd.log.a3"
+              overwrite_if_to_key_exists: true
+            - from_key: "AUDIT_FIELD_A4"
+              to_key: "auditd.log.a4"
+              overwrite_if_to_key_exists: true
+            - from_key: "AUDIT_FIELD_A5"
+              to_key: "auditd.log.a5"
+              overwrite_if_to_key_exists: true
+            - from_key: "AUDIT_FIELD_A6"
+              to_key: "auditd.log.a6"
+              overwrite_if_to_key_exists: true
+            - from_key: "AUDIT_FIELD_A7"
+              to_key: "auditd.log.a7"
+              overwrite_if_to_key_exists: true
+            - from_key: "AUDIT_FIELD_A8"
+              to_key: "auditd.log.a8"
+              overwrite_if_to_key_exists: true
+            - from_key: "AUDIT_FIELD_A9"
+              to_key: "auditd.log.a9"
+              overwrite_if_to_key_exists: true
+            - from_key: "AUDIT_FIELD_A10"
+              to_key: "auditd.log.a10"
+              overwrite_if_to_key_exists: true
+            - from_key: "AUDIT_FIELD_A11"
+              to_key: "auditd.log.a11"
+              overwrite_if_to_key_exists: true
+            - from_key: "AUDIT_FIELD_A12"
+              to_key: "auditd.log.a12"
+              overwrite_if_to_key_exists: true
+            - from_key: "AUDIT_FIELD_A13"
+              to_key: "auditd.log.a13"
+              overwrite_if_to_key_exists: true
+            - from_key: "AUDIT_FIELD_A14"
+              to_key: "auditd.log.a14"
+              overwrite_if_to_key_exists: true
+            - from_key: "AUDIT_FIELD_ARCH"
+              to_key: "auditd.log.arch"
+              overwrite_if_to_key_exists: true
+            - from_key: "AUDIT_FIELD_ARGC"
+              to_key: "auditd.log.argc"
+              overwrite_if_to_key_exists: true
+            - from_key: "AUDIT_FIELD_EXIT"
+              to_key: "auditd.log.exit"
+              overwrite_if_to_key_exists: true
+            - from_key: "AUDIT_FIELD_FILE"
+              to_key: "auditd.log.file"
+              overwrite_if_to_key_exists: true
+            - from_key: "AUDIT_FIELD_HASH"
+              to_key: "auditd.log.hash"
+              overwrite_if_to_key_exists: true
+            - from_key: "AUDIT_FIELD_ITEMS"
+              to_key: "auditd.log.items"
+              overwrite_if_to_key_exists: true
+            - from_key: "AUDIT_FIELD_KEY"
+              to_key: "auditd.log.key"
+              overwrite_if_to_key_exists: true
+            - from_key: "AUDIT_FIELD_SGID"
+              to_key: "auditd.log.sgid"
+              overwrite_if_to_key_exists: true
+            - from_key: "AUDIT_FIELD_SUCCESS"
+              to_key: "auditd.log.success"
+              overwrite_if_to_key_exists: true
+            - from_key: "AUDIT_FIELD_SUID"
+              to_key: "auditd.log.suid"
+              overwrite_if_to_key_exists: true
+            - from_key: "AUDIT_FIELD_SYSCALL"
+              to_key: "auditd.log.syscall"
+              overwrite_if_to_key_exists: true
+            - from_key: "EGID"
+              to_key: "user.effective.group.id"
+              overwrite_if_to_key_exists: true
+            - from_key: "EUID"
+              to_key: "user.effective.id"
+              overwrite_if_to_key_exists: true
+            - from_key: "FSGID"
+              to_key: "user.filesystem.group.id"
+              overwrite_if_to_key_exists: true
+            - from_key: "FSUID"
+              to_key: "user.filesystem.id"
+              overwrite_if_to_key_exists: true
+            - from_key: "GID"
+              to_key: "user.group.id"
+              overwrite_if_to_key_exists: true
+            - from_key: "SOURCE_REALTIME_TIMESTAMP"
+              to_key: "auditd.log.epoch"
+              overwrite_if_to_key_exists: true
+            - from_key: "AUDIT_ID"
+              to_key: "user.audit.id"
+              overwrite_if_to_key_exists: true
+            - from_key: "MESSAGE"
+              to_key: "message"
+              overwrite_if_to_key_exists: true
+            - from_key: "COMM"
+              to_key: "auditd.log.comm"
+              overwrite_if_to_key_exists: true
+            - from_key: "PID"
+              to_key: "process.pid"
+              overwrite_if_to_key_exists: true
+            - from_key: "PPID"
+              to_key: "process.parent.pid"
+              overwrite_if_to_key_exists: true
+            - from_key: "EXE"
+              to_key: "auditd.log.exe"
+              overwrite_if_to_key_exists: true
+            - from_key: "TTY"
+              to_key: "user.terminal"
+              overwrite_if_to_key_exists: true
+            - from_key: "SELINUX_CONTEXT"
+              to_key: "auditd.file.selinux.context"
+              overwrite_if_to_key_exists: true
+            - from_key: "UID"
+              to_key: "auditd.log.uid"
+              overwrite_if_to_key_exists: true
+      route:
+        - auditd-logs: '/event.type == "auditd"'
+        - k8s-logs: '/event.type == "k8s"'
+        - node-logs: '/event.type == "node"'
+            
+      sink:
+        - opensearch:
+            hosts: [ "https://opensearch-node1:9200" ]
+            insecure: true
+            username: admin
+            password: admin
+            index: logs-auditd
+            routes: [auditd-logs]
+        - opensearch:
+            hosts: [ "https://opensearch-node1:9200" ]
+            insecure: true
+            username: admin
+            password: admin
+            index: logs-k8s
+            routes: [k8s-logs]
+        - opensearch:
+            hosts: [ "https://opensearch-node1:9200" ]
+            insecure: true
+            username: admin
+            password: admin
+            index: logs-node
+            routes: [node-logs]
+
+  data-prepper-config.yaml: |
+    ssl: false
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: data-prepper
+  name: data-prepper-headless
+spec:
+  clusterIP: None
+  ports:
+    - name: "2021"
+      port: 2021
+      targetPort: 2021
+  selector:
+    app: data-prepper
+status:
+  loadBalancer: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: data-prepper
+  name: data-prepper-metrics
+spec:
+  type: NodePort
+  ports:
+    - name: "4900"
+      port: 4900
+      targetPort: 4900
+  selector:
+    app: data-prepper
+status:
+  loadBalancer: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: data-prepper
+  name: data-prepper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: data-prepper
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: data-prepper
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+        - args:
+            - bin/data-prepper
+            - /etc/data-prepper/pipelines.yaml
+            - /etc/data-prepper/data-prepper-config.yaml 
+          image: opensearchproject/data-prepper:2.4.0
+          name: data-prepper
+          ports:
+            - containerPort: 2021
+          resources: {}
+          volumeMounts:
+            - mountPath: /etc/data-prepper
+              name: prepper-configmap-claim0
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+        - name: prepper-configmap-claim0
+          configMap:
+            name: data-prepper-config
+status: {}
+---

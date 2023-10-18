@@ -1,0 +1,200 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cos-auditd
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: cos-auditd-logging
+  namespace: cos-auditd
+  annotations:
+    kubernetes.io/description: 'DaemonSet that enables Linux auditd logging on non-Autopilot COS nodes.'
+spec:
+  selector:
+    matchLabels:
+      name: cos-auditd-logging
+  template:
+    metadata:
+      labels:
+        name: cos-auditd-logging
+    spec:
+      # Necessary for ensuring access to Google Cloud credentials from the node's metadata server.
+      hostNetwork: true
+      hostPID: true
+      dnsPolicy: Default
+      initContainers:
+      - name: cos-auditd-setup
+        image: ubuntu
+        command: ["chroot", "/host", "systemctl", "start", "cloud-audit-setup"]
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: host
+          mountPath: /host
+        resources:
+          requests:
+            memory: "10Mi"
+            cpu: "10m"
+      containers:
+      - name: cos-auditd-fluent-bit
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - all
+            add:
+            - DAC_OVERRIDE
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: spec.nodeName
+        # Substitute these (manually or via envsubst). For example, run
+        # `CLUSTER_NAME=example-cluster CLUSTER_LOCATION=us-central1-a envsubst '$CLUSTER_NAME,$CLUSTER_LOCATION' < ${THIS_FILE:?} | kubectl apply -f -`
+        - name: CLUSTER_NAME
+          value: "opensearch-testdrive-1"
+        - name: CLUSTER_LOCATION
+          value: "us-central1-c"
+        image: gke.gcr.io/fluent-bit@sha256:436f3b7a38522314dd3db22ae8187192d928763c29e94d04c0900b34f0ca0779 # v1.8.12-gke.16
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 2024
+          initialDelaySeconds: 120
+          periodSeconds: 60
+          timeoutSeconds: 5
+        ports:
+        - name: metrics
+          containerPort: 2024
+        resources:
+          limits:
+            cpu: "1"
+            memory: 500Mi
+          requests:
+            cpu: 100m
+            memory: 200Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /var/log
+          name: varlog
+        - mountPath: /var/lib/cos-auditd-fluent-bit/pos-files
+          name: varlib-cos-auditd-fluent-bit-pos-files
+        - mountPath: /fluent-bit/etc
+          name: config-volume
+      nodeSelector:
+        cloud.google.com/gke-os-distribution: cos
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 120
+      tolerations:
+      - operator: "Exists"
+        effect: "NoExecute"
+      - operator: "Exists"
+        effect: "NoSchedule"
+      volumes:
+      - name: host
+        hostPath:
+          path: /
+      - name: varlog
+        hostPath:
+          path: /var/log
+      - name: varlibcos-auditd-fluent-bit
+        hostPath:
+          path: /var/lib/cos-auditd-fluent-bit
+          type: DirectoryOrCreate
+      - name: varlib-cos-auditd-fluent-bit-pos-files
+        hostPath:
+          path: /var/lib/cos-auditd-fluent-bit/pos-files
+          type: DirectoryOrCreate
+      - name: config-volume
+        configMap:
+          name: cos-auditd-fluent-bit-config
+  updateStrategy:
+    type: RollingUpdate
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cos-auditd-fluent-bit-config
+  namespace: cos-auditd
+  annotations:
+    kubernetes.io/description: 'ConfigMap for Linux auditd logging daemonset on COS nodes.'
+data:
+  fluent-bit.conf: |-
+    [SERVICE]
+        Flush         5
+        Grace         120
+        Log_Level     info
+        Daemon        off
+        HTTP_Server   On
+        HTTP_Listen   0.0.0.0
+        HTTP_PORT     2024
+
+    [INPUT]
+        # https://docs.fluentbit.io/manual/input/systemd
+        Name            systemd
+        Alias           audit
+        Tag             audit
+        Systemd_Filter  SYSLOG_IDENTIFIER=audit
+        Path            /var/log/journal
+        DB              /var/lib/cos-auditd-fluent-bit/pos-files/audit.db
+        Buffer_Max_Size 20MB
+        Mem_Buf_Limit   20MB
+        Lowercase         On
+        Strip_Underscores On 
+
+    [FILTER]
+        # https://docs.fluentbit.io/manual/pipeline/filters/modify
+        Name                modify
+        Match               audit
+        Add                 logging.googleapis.com/local_resource_id k8s_node.${NODE_NAME}
+
+    [FILTER]
+        Name           modify
+        Match          audit
+        Add            logging.googleapis.com/logName linux-auditd
+
+    [OUTPUT]
+        Name                      http
+        Match                     audit
+        Host                      54.75.198.166
+        Port                      2222
+        URI                       /log/ingest
+        Format                    json
+        Json_date_format          iso8601
+
+
+
+
+    [INPUT]
+        # https://docs.fluentbit.io/manual/input/systemd
+        Name            systemd
+        Alias           audit
+        Tag             audit
+        Systemd_Filter  SYSLOG_IDENTIFIER=audit
+        Path            /var/log/journal
+        DB              /var/lib/cos-auditd-fluent-bit/pos-files/audit.db
+        Buffer_Max_Size 20MB
+        Mem_Buf_Limit   20MB
+
+    [FILTER]
+        Name           modify
+        Match          audit
+        Add            event.type auditd
+    
+    [FILTER]
+        Name           modify
+        Match          audit
+        Add            kubernetes.node.name   ${NODE_NAME}
+    
+    [OUTPUT]
+        Name                      http
+        Match                     audit
+        Host                      data-prepper-headless
+        Port                      2021
+        URI                       /log/ingest
+        Format                    json
+        Json_date_format          iso8601

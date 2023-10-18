@@ -1,0 +1,171 @@
+log-pipeline:
+  source:
+    http:
+      ssl: false
+  processor:
+    - rename_keys:
+        entries:
+        - from_key: "date"
+          to_key: "@timestamp"
+          overwrite_if_to_key_exists: true
+        - from_key: "BOOT_ID"
+          to_key: "host.boot.id"
+          overwrite_if_to_key_exists: true  
+        - from_key: "MACHINE_ID"
+          to_key: "host.id"
+          overwrite_if_to_key_exists: true
+        - from_key: "RUNTIME_SCOPE"
+          to_key: "event.module"
+          overwrite_if_to_key_exists: true
+        - from_key: "TRANSPORT"
+          to_key: "event.category"
+          overwrite_if_to_key_exists: true
+        - from_key: "SYSLOG_FACILITY"
+          to_key: "log.syslog.facility.name"
+          overwrite_if_to_key_exists: true
+        - from_key: "SYSLOG_IDENTIFIER"
+          to_key: "log.syslog.msgid"
+          overwrite_if_to_key_exists: true
+        - from_key: "HOSTNAME"
+          to_key: "host.name"
+          overwrite_if_to_key_exists: true
+        - from_key: "AUDIT_TYPE"
+          to_key: "event.id"
+          overwrite_if_to_key_exists: true
+        - from_key: "AUDIT_TYPE_NAME"
+          to_key: "event.type"
+          overwrite_if_to_key_exists: true
+        - from_key: "AUDIT_FIELD_ARGC"
+          to_key: "auditd.log.argc"
+          overwrite_if_to_key_exists: true
+        - from_key: "AUDIT_FIELD_A0"
+          to_key: "auditd.log.a0"
+          overwrite_if_to_key_exists: true
+        - from_key: "AUDIT_FIELD_A1"
+          to_key: "auditd.log.a1"
+          overwrite_if_to_key_exists: true
+        - from_key: "AUDIT_FIELD_A2"
+          to_key: "auditd.log.a2"
+          overwrite_if_to_key_exists: true
+        - from_key: "AUDIT_FIELD_A3"
+          to_key: "auditd.log.a3"
+          overwrite_if_to_key_exists: true
+        - from_key: "AUDIT_FIELD_A4"
+          to_key: "auditd.log.a4"
+          overwrite_if_to_key_exists: true
+        - from_key: "AUDIT_FIELD_A5"
+          to_key: "auditd.log.a5"
+          overwrite_if_to_key_exists: true
+        - from_key: "AUDIT_FIELD_A6"
+          to_key: "auditd.log.a6"
+          overwrite_if_to_key_exists: true
+        - from_key: "AUDIT_FIELD_A7"
+          to_key: "auditd.log.a7"
+          overwrite_if_to_key_exists: true
+        - from_key: "AUDIT_FIELD_A8"
+          to_key: "auditd.log.a8"
+          overwrite_if_to_key_exists: true
+        - from_key: "AUDIT_FIELD_A9"
+          to_key: "auditd.log.a9"
+          overwrite_if_to_key_exists: true
+        - from_key: "AUDIT_FIELD_A10"
+          to_key: "auditd.log.a10"
+          overwrite_if_to_key_exists: true
+        - from_key: "AUDIT_FIELD_A11"
+          to_key: "auditd.log.a11"
+          overwrite_if_to_key_exists: true
+        - from_key: "AUDIT_FIELD_A12"
+          to_key: "auditd.log.a12"
+          overwrite_if_to_key_exists: true
+        - from_key: "AUDIT_FIELD_A13"
+          to_key: "auditd.log.a13"
+          overwrite_if_to_key_exists: true
+        - from_key: "AUDIT_FIELD_A14"
+          to_key: "auditd.log.a14"
+          overwrite_if_to_key_exists: true
+        - from_key: "AUDIT_FIELD_ARCH"
+          to_key: "auditd.log.arch"
+          overwrite_if_to_key_exists: true
+        - from_key: "AUDIT_FIELD_ARGC"
+          to_key: "auditd.log.argc"
+          overwrite_if_to_key_exists: true
+        - from_key: "AUDIT_FIELD_EXIT"
+          to_key: "auditd.log.exit"
+          overwrite_if_to_key_exists: true
+        - from_key: "AUDIT_FIELD_FILE"
+          to_key: "auditd.log.file"
+          overwrite_if_to_key_exists: true
+        - from_key: "AUDIT_FIELD_HASH"
+          to_key: "auditd.log.hash"
+          overwrite_if_to_key_exists: true
+        - from_key: "AUDIT_FIELD_ITEMS"
+          to_key: "auditd.log.items"
+          overwrite_if_to_key_exists: true
+        - from_key: "AUDIT_FIELD_KEY"
+          to_key: "auditd.log.key"
+          overwrite_if_to_key_exists: true
+        - from_key: "AUDIT_FIELD_SGID"
+          to_key: "auditd.log.sgid"
+          overwrite_if_to_key_exists: true
+        - from_key: "AUDIT_FIELD_SUCCESS"
+          to_key: "auditd.log.success"
+          overwrite_if_to_key_exists: true
+        - from_key: "AUDIT_FIELD_SUID"
+          to_key: "auditd.log.suid"
+          overwrite_if_to_key_exists: true
+        - from_key: "AUDIT_FIELD_SYSCALL"
+          to_key: "auditd.log.syscall"
+          overwrite_if_to_key_exists: true
+        - from_key: "EGID"
+          to_key: "user.effective.group.id"
+          overwrite_if_to_key_exists: true
+        - from_key: "EUID"
+          to_key: "user.effective.id"
+          overwrite_if_to_key_exists: true
+        - from_key: "FSGID"
+          to_key: "user.filesystem.group.id"
+          overwrite_if_to_key_exists: true
+        - from_key: "FSUID"
+          to_key: "user.filesystem.id"
+          overwrite_if_to_key_exists: true
+        - from_key: "GID"
+          to_key: "user.group.id"
+          overwrite_if_to_key_exists: true
+        - from_key: "SOURCE_REALTIME_TIMESTAMP"
+          to_key: "auditd.log.epoch"
+          overwrite_if_to_key_exists: true
+        - from_key: "AUDIT_ID"
+          to_key: "user.audit.id"
+          overwrite_if_to_key_exists: true
+        - from_key: "MESSAGE"
+          to_key: "message"
+          overwrite_if_to_key_exists: true
+        - from_key: "COMM"
+          to_key: "auditd.log.comm"
+          overwrite_if_to_key_exists: true
+        - from_key: "PID"
+          to_key: "process.pid"
+          overwrite_if_to_key_exists: true
+        - from_key: "PPID"
+          to_key: "process.parent.pid"
+          overwrite_if_to_key_exists: true
+        - from_key: "EXE"
+          to_key: "auditd.log.exe"
+          overwrite_if_to_key_exists: true
+        - from_key: "TTY"
+          to_key: "user.terminal"
+          overwrite_if_to_key_exists: true
+        - from_key: "SELINUX_CONTEXT"
+          to_key: "auditd.file.selinux.context"
+          overwrite_if_to_key_exists: true
+        - from_key: "UID"
+          to_key: "auditd.log.uid"
+          overwrite_if_to_key_exists: true
+            
+  sink:
+    - opensearch:
+        hosts: [ "https://opensearch-node1:9200" ]
+        insecure: true
+        username: admin
+        password: admin 
+        index: logs-auditd
