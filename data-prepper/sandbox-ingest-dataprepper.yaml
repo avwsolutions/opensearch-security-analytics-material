@@ -170,27 +170,27 @@ data:
               to_key: "auditd.log.uid"
               overwrite_if_to_key_exists: true
       route:
-        - auditd-logs: '/event.type == "auditd"'
-        - k8s-logs: '/event.type == "k8s"'
-        - node-logs: '/event.type == "node"'
+        - auditd-logs: '/log_source == "auditd"'
+        - k8s-logs: '/log_source == "k8s"'
+        - node-logs: '/log_source == "node"'
             
       sink:
         - opensearch:
-            hosts: [ "https://opensearch-node1:9200" ]
+            hosts: [ "https://sandbox-security-analytics:9200" ]
             insecure: true
             username: admin
             password: admin
             index: logs-auditd
             routes: [auditd-logs]
         - opensearch:
-            hosts: [ "https://opensearch-node1:9200" ]
+            hosts: [ "https://sandbox-security-analytics:9200" ]
             insecure: true
             username: admin
             password: admin
             index: logs-k8s
             routes: [k8s-logs]
         - opensearch:
-            hosts: [ "https://opensearch-node1:9200" ]
+            hosts: [ "https://sandbox-security-analytics:9200" ]
             insecure: true
             username: admin
             password: admin
@@ -207,7 +207,6 @@ metadata:
     app: data-prepper
   name: data-prepper-headless
 spec:
-  clusterIP: None
   ports:
     - name: "2021"
       port: 2021

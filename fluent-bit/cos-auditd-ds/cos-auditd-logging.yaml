@@ -155,45 +155,12 @@ data:
     [FILTER]
         Name           modify
         Match          audit
-        Add            logging.googleapis.com/logName linux-auditd
+        Add            log_source auditd
 
     [OUTPUT]
         Name                      http
         Match                     audit
-        Host                      54.75.198.166
-        Port                      2222
-        URI                       /log/ingest
-        Format                    json
-        Json_date_format          iso8601
-
-
-
-
-    [INPUT]
-        # https://docs.fluentbit.io/manual/input/systemd
-        Name            systemd
-        Alias           audit
-        Tag             audit
-        Systemd_Filter  SYSLOG_IDENTIFIER=audit
-        Path            /var/log/journal
-        DB              /var/lib/cos-auditd-fluent-bit/pos-files/audit.db
-        Buffer_Max_Size 20MB
-        Mem_Buf_Limit   20MB
-
-    [FILTER]
-        Name           modify
-        Match          audit
-        Add            event.type auditd
-    
-    [FILTER]
-        Name           modify
-        Match          audit
-        Add            kubernetes.node.name   ${NODE_NAME}
-    
-    [OUTPUT]
-        Name                      http
-        Match                     audit
-        Host                      data-prepper-headless
+        Host                      10.100.9.241 
         Port                      2021
         URI                       /log/ingest
         Format                    json

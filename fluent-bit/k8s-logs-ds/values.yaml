@@ -391,12 +391,12 @@ config:
     [FILTER]
         Name           modify
         Match          kube.*
-        Add            event.type k8s-logs
+        Add            log_source k8s
 
     [FILTER]
         Name           modify
         Match          host.*
-        Add            event.type node
+        Add            log_source node
 
   ## https://docs.fluentbit.io/manual/pipeline/outputs
   outputs: |

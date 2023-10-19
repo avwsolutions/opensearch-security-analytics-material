@@ -23,7 +23,7 @@ spec:
   nodePools:
     - component: nodes
       replicas: 2
-      diskSize: "5Gi"
+      diskSize: "50Gi"
       nodeSelector:
       resources:
          requests:
