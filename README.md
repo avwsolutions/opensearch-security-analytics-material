@@ -2,10 +2,10 @@
 
 This repo contains all material that is discussed in the Meetup about OpenSearch SIEM with Fluent Bit on Kubernetes.
 
-Some notes to keep in mind.
+**Some notes to keep in mind:**
 
-**Note: This setup is only for demo purposes and is NOT DESIGNED FOR PRODUCTION USE**
-**Note: For simplicity we use the default credentials this is STRONGLY NOT ADVISABLE FOR PRODUCTION USE**
+- This setup is only for demo purposes and is **NOT DESIGNED FOR PRODUCTION USE**
+- For simplicity we use the default credentials this is **STRONGLY NOT ADVISABLE FOR PRODUCTION USE**
 
 ## Architecture design
 
