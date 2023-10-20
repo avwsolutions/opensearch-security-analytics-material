@@ -27,7 +27,7 @@ Let's call it the **Opensearch-Dataprepper-Fluentbit** stack :)
 
 Prereqs:
 - Ensure you have a *project* available on Google Cloud to use.
-- Ensure that you have enabled the Kubernetes API (for GKE) on Google Cloud.
+- Ensure that you have enabled the Kubernetes Engine API (for GKE) on Google Cloud.
 - Optionally change the deployment region and zone in the *provider.tf*.
 
 ```
@@ -163,6 +163,6 @@ kubectl logs ds/fluent-bit
 ### 07 - Finalize OS Dashboards configuration
 
 You have the setup up and running. Check with *Dev Tools* if indices are created (logs-auditd, logs-node, logs-k8s) and _doccount is increasing.
-If you want to use *Discover*, you may have to add three *Index Patterns* in *OS Dashboards Configuration*.
+If you want to use *Discover*, you may have to add three *Index Patterns* under *Dashboards Management*.
 
 Now it's time to play around with Log and Security Analytics using OpenSearch!!!
