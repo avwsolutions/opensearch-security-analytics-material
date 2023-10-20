@@ -11,7 +11,7 @@ Some notes to keep in mind.
 
 Below an overview of the architecture design and main components used.
 
-<img src="https://raw.githubusercontent.com/avwsolutions/opensearch-security-analytics-material/architecture-opensearch-dataprepper-fluentbit-stack.png" alt="Architecture Overview">
+<img src="https://raw.githubusercontent.com/avwsolutions/opensearch-security-analytics-material/master/architecture-opensearch-dataprepper-fluentbit-stack.png" alt="Architecture Overview">
 
 Main components are:
 - Opster OpenSearch Operator
