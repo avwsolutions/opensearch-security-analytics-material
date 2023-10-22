@@ -165,4 +165,72 @@ kubectl logs ds/fluent-bit
 You have the setup up and running. Check with *Dev Tools* if indices are created (logs-auditd, logs-node, logs-k8s) and _doccount is increasing.
 If you want to use *Discover*, you may have to add three *Index Patterns* under *Dashboards Management*.
 
-Now it's time to play around with Log and Security Analytics using OpenSearch!!!
+Now it's time to play around with Log and Security Analytics using OpenSearch!!! In short the Security Analytics plugin provides multiple capabilities for managing Security threats like detection, analysis and response. These capabilities are delivered through several components, such as:
+- Detection rules
+- Detectors
+- Findings
+- Alerts
+- Correlations
+
+Before you start working with Security Analytics I highly recommend to get some fundamental knowledge and understanding on the [Mitre Att&ck Framework](https://attack.mitre.org/) and [Sigma rule specification](https://github.com/SigmaHQ/sigma).
+
+### 08 - Creating a experimental Detection rule
+
+As you may have read that the plugin is shipped +/- 2200 prepackaged detection rules. Some cases you may want to create your own detection rule, let's give it a try.
+
+Open Security Analytics and click *Detection rules* you will see two options on top right of the page, options are *Import detection rule* and *Create detection rule*. We are going to create a new detection rule.
+
+As you may see that a UI based *Visual Editor* can be used. Since we already have a piece of code, choose the *YAML Editor*.
+
+Below a very simple Hello World type of rule that can detect `curl` usage on Linux machines. Important here that it expects the value `curl` to be provided through a field called *auditd.log.comm*. In *step 05* you have deployed the collector, but do you know where the actual mapping is taking place?
+
+```
+id: we8MEYsBMI5TPLxoDCly
+logsource:
+  product: linux
+title: curl-usage
+description: Detect usage of curl on Linux
+tags: []
+falsepositives: []
+level: medium
+status: experimental
+references: []
+author: AVWSolutions
+detection:
+  condition: Selection_1
+  Selection_1:
+    auditd.log.comm|contains:
+      - curl
+```
+
+Don't forget to save this new rule.
+
+### 09 - Creating your first detector
+
+In this step we are actively going to detect potential threats in our selected index using the *curl-usage* rule we created.
+
+Open Security Analytics and click *Detectors*. Again we will have a very nice UI to define a detector in three steps.
+Use the following as input:
+
+**Detector Details**
+- Name it curl-usage detection.
+
+**Data Source**
+- Select your *logs-auditd* index.
+
+**Log types and rules**
+- Select *System logs*, deselect all rules and only select the *curl-usage* rule and enable this.
+
+
+Keep **Field mapping*** and **Detector Schedule** configuration as default and skip **Set up alert triggers** (top right *Skip and configure later*).
+
+Review and create the Detector. Now open *Detectors* again and see if the detector is activated. You may want to filter using `status:(Active)`
+
+### 10 - Looking into Findings
+
+Now when data is coming in, detection rule is correctly configured and the detector is running you will see Findings being created. On *Findings* scroll down and you will see a table with findings. Hover over and click on *View Details*. This will show the actual Finding with corresponding rule detail, detected documents and correlations.
+
+### New sections will follow soon !
+
+
+
